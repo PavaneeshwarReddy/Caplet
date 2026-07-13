@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"caplet/internal/cli"
+	"log"
+)
 
 func main() {
-	fmt.Println("Hello from Caplet")
+	if err := cli.Execute(); err != nil {
+		log.Fatal(err)
+	}
 }
