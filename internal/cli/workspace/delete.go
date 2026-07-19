@@ -2,8 +2,7 @@ package workspace
 
 import (
 	"caplet/internal/util"
-	"os"
-	"path/filepath"
+	"caplet/internal/workspace"
 
 	"github.com/spf13/cobra"
 )
@@ -21,28 +20,9 @@ var wsDeleteCmd = &cobra.Command{
 			return err
 		}
 
-		entries, err := os.ReadDir(workingDir)
-		if err != nil {
-			return err
-		}
-
-		var workspaceFound bool
-		for _, entry := range entries {
-			if entry.IsDir() && entry.Name() == workspaceName {
-				workspaceFound = true
-				break
-			}
-		}
-
-		if !workspaceFound {
-			return ErrWorkspaceNotFound
-		}
-
-		if err := os.RemoveAll(filepath.Join(workingDir, workspaceName)); err != nil {
-			return err
-		}
-
-		return nil
+		workspaceRepo := workspace.NewWorkspaceRepository(workingDir)
+		workspaceService := workspace.NewService(workspaceRepo, nil)
+		return workspaceService.DeleteWorkspace(workspaceName)
 	},
 }
 

@@ -3,6 +3,7 @@ package workspace
 import (
 	"caplet/internal/config"
 	"caplet/internal/util"
+	"caplet/internal/workspace"
 	"encoding/json"
 	"os"
 
@@ -22,23 +23,13 @@ var wsUseCmd = &cobra.Command{
 			return err
 		}
 
-		entries, err := os.ReadDir(workingDir)
-		if err != nil {
-			return err
-		}
-
-		var workspaceFound bool
-		for _, entry := range entries {
-			if entry.IsDir() && entry.Name() == workspaceName {
-				workspaceFound = true
-				break
-			}
-		}
-		if !workspaceFound {
-			return ErrWorkspaceNotFound
-		}
-
 		configPath := util.GetConfigPath(workingDir)
+
+		workspaceRepo := workspace.NewWorkspaceRepository(workingDir)
+		configRepo := config.NewConfigRepository(configPath)
+		workspaceService := workspace.NewService(workspaceRepo, configRepo)
+		return workspaceService.UseWorkspace(workspaceName)
+
 		_, err = os.Stat(configPath)
 		if err != nil {
 			return err

@@ -2,8 +2,7 @@ package workspace
 
 import (
 	"caplet/internal/util"
-	"log"
-	"os"
+	"caplet/internal/workspace"
 
 	"github.com/spf13/cobra"
 )
@@ -18,18 +17,9 @@ var wsListCmd = &cobra.Command{
 			return err
 		}
 
-		entries, err := os.ReadDir(workingDir)
-		if err != nil {
-			return err
-		}
-
-		for _, entry := range entries {
-			if entry.IsDir() {
-				log.Println(entry)
-			}
-		}
-
-		return nil
+		workspaceRepo := workspace.NewWorkspaceRepository(workingDir)
+		worspsaceService := workspace.NewService(workspaceRepo, nil)
+		return worspsaceService.ListWorkspaces()
 	},
 }
 

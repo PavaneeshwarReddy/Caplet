@@ -2,8 +2,7 @@ package workspace
 
 import (
 	"caplet/internal/util"
-	"os"
-	"path/filepath"
+	"caplet/internal/workspace"
 
 	"github.com/spf13/cobra"
 )
@@ -21,22 +20,10 @@ var wsCreateCmd = &cobra.Command{
 			return err
 		}
 
-		entries, err := os.ReadDir(workingDir)
-		if err != nil {
-			return err
-		}
+		workspaceRepo := workspace.NewWorkspaceRepository(workingDir)
+		workspaceService := workspace.NewService(workspaceRepo, nil)
+		return workspaceService.CreateWorkspace(workspaceName)
 
-		for _, entry := range entries {
-			if entry.Name() == workspaceName {
-				return ErrWorkspaceAlreadyExists
-			}
-		}
-
-		if err := os.MkdirAll(filepath.Join(workingDir, workspaceName), 0755); err != nil {
-			return err
-		}
-
-		return nil
 	},
 }
 
