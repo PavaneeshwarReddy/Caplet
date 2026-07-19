@@ -4,8 +4,6 @@ import (
 	"caplet/internal/config"
 	"caplet/internal/util"
 	"caplet/internal/workspace"
-	"encoding/json"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -29,31 +27,6 @@ var wsUseCmd = &cobra.Command{
 		configRepo := config.NewConfigRepository(configPath)
 		workspaceService := workspace.NewService(workspaceRepo, configRepo)
 		return workspaceService.UseWorkspace(workspaceName)
-
-		_, err = os.Stat(configPath)
-		if err != nil {
-			return err
-		}
-		data, err := os.ReadFile(configPath)
-		if err != nil {
-			return err
-		}
-
-		var cfg config.Config
-		if err = json.Unmarshal(data, &cfg); err != nil {
-			return err
-		}
-		cfg.ActiveWorkspace = workspaceName
-		data, err = json.MarshalIndent(cfg, "", " ")
-		if err != nil {
-			return err
-		}
-
-		if err = os.WriteFile(configPath, data, 0644); err != nil {
-			return err
-		}
-
-		return nil
 
 	},
 }
