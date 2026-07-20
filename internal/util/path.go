@@ -16,3 +16,7 @@ func GetWorkingDir() (string, error) {
 func GetConfigPath(workingDir string) string {
 	return filepath.Join(workingDir, "config.json")
 }
+
+func GetSkillsPath(workingDir string) string {
+	return filepath.Join(workingDir, "skills")
+}

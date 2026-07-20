@@ -34,7 +34,7 @@ func (cr *ConfigRepository) Get() (*Config, error) {
 
 	// unmarshal the data to config model
 	var cfg Config
-	if json.Unmarshal(data, &cfg); err != nil {
+	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err
 	}
 

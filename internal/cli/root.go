@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"caplet/internal/cli/skill"
 	"caplet/internal/cli/workspace"
 
 	"github.com/spf13/cobra"
@@ -14,6 +15,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(workspace.WsCmd)
+	rootCmd.AddCommand(skill.SkillCmd)
 }
 
 func Execute() error {

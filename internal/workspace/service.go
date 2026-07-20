@@ -67,3 +67,12 @@ func (s *Service) UseWorkspace(name string) error {
 
 	return s.configRepo.Save(cfg)
 }
+
+func (s *Service) GetActiveWorkspace() (string, error) {
+	cfg, err := s.configRepo.Get()
+	if err != nil {
+		return "", err
+	}
+
+	return cfg.ActiveWorkspace, nil
+}
